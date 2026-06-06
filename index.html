@@ -420,6 +420,35 @@ footer { background:var(--dark); padding:26px 56px; display:flex; align-items:ce
   .fc { justify-content: center; }
 }
 </style>
+
+<!-- Event snippet for Submit lead form conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-18218773760/BubUCNnC97kcEIDase9D',
+      'value': 1.0,
+      'currency': 'INR'
+  });
+</script>
+
+<!-- Event snippet for Submit lead form conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-18218773760/BubUCNnC97kcEIDase9D',
+      'value': 1.0,
+      'currency': 'INR',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
+  
 </head>
 <body>
 
