@@ -15,6 +15,24 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 
+<!-- Meta Pixel Code (replace this section for every dentist) --> 
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1031927722595612');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1031927722595612&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <!--
 ╔══════════════════════════════════════════════════════╗
 ║           CLINIC CONFIG — CHANGE THIS SECTION        ║
@@ -40,7 +58,6 @@ HOURS               : Opening hours e.g. Mon–Sat · 9am to 8pm
 CLINIC_PHOTOS       : Array of clinic photo filenames
                       e.g. ["reception.jpg","treatment.jpg","outside.jpg"]
                       Shows between reviews and map. Leave as [] if none.
- META_PIXEL_ID:     : Pixel id
                     
 
 
@@ -81,8 +98,7 @@ const CLINIC = {
   CANONICAL_URL:      "https://dentalyst.docpulse.in",
   APPS_SCRIPT_URL:    "https://script.google.com/macros/s/AKfycbxTI65AxeCGyDwfZrrvYLbJlIcY5sRkDMU8HkFs5rSt7aUbTxUB9Cyb-BsbvpmvwU4i/exec",
   DOCTOR_PHOTO:       "dr_anindita.jpg",
-  CLINIC_PHOTOS:      [],
-  META_PIXEL_ID:      "1031927722595612"
+  CLINIC_PHOTOS:      []
 };
 </script>
 
@@ -221,29 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 </script>
-
-<!-- Meta Pixel Code — ID set dynamically from CLINIC.META_PIXEL_ID -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-</script>
-<script>
-// Initialise pixel after CLINIC config is available
-document.addEventListener('DOMContentLoaded', function() {
-  if (typeof fbq !== 'undefined' && CLINIC.META_PIXEL_ID) {
-    fbq('init', CLINIC.META_PIXEL_ID);
-    fbq('track', 'PageView');
-  }
-});
-</script>
-<!-- End Meta Pixel Code -->
-
 
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -788,10 +781,7 @@ async function handleSubmit(e) {
   document.getElementById('form-content').style.display = 'none';
   document.getElementById('success-state').style.display = 'flex';
 
-    // Meta Pixel — track form submission as Lead
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'Lead');
-  }
+  if (typeof fbq !== 'undefined') { fbq('track', 'Lead'); }
 
 }
 </script>
