@@ -750,7 +750,7 @@ async function handleSubmit(e) {
   // ── 1. FIRE TRACKING EVENTS IMMEDIATELY ─────────────────────────
   // Fire Meta Lead Event
   if (typeof fbq !== 'undefined') { 
-    fbq('trackCustom', 'ConsultationRequest', {
+    fbq('track', 'Lead', {
       content_name: 'Consultation Booking',
       currency: 'INR',
       value: 1.0
