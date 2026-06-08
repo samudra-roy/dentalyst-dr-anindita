@@ -796,6 +796,19 @@ async function handleSubmit(e) {
   document.getElementById('form-content').style.display = 'none';
   document.getElementById('success-state').style.display = 'flex';
 }
+
+
+// Add this at the bottom of your script block to bind the form to your code
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('consultation-form');
+  if (form) {
+    form.addEventListener('submit', handleSubmit);
+  } else {
+    console.error("Form with id 'consultation-form' not found!");
+  }
+});
+
+
 </script>
 </body>
 </html>
