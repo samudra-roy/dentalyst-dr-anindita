@@ -469,15 +469,6 @@ footer { background:var(--dark); padding:26px 56px; display:flex; align-items:ce
 }
 </style>
 
-<!-- Event snippet for Submit lead form conversion page -->
-<script>
-  gtag('event', 'conversion', {
-      'send_to': 'AW-18218773760/BubUCNnC97kcEIDase9D',
-      'value': 1.0,
-      'currency': 'INR'
-  });
-</script>
-
 <!-- Event snippet for Submit lead form conversion page
 In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
 <script>
@@ -558,7 +549,8 @@ function gtag_report_conversion(url) {
             </div>
             <span><span class="review-count-plain">126</span> patients trust <span class="doctor-name">Dr. Anindita</span> · Rated <span class="clinic-rating">5★</span> on Google</span>
           </div>
-          <form onsubmit="handleSubmit(event)">
+          <!-- <form onsubmit="handleSubmit(event)"> -->
+          <form>
             <div class="fg"><label for="name">Your full name *</label><input type="text" id="name" placeholder="e.g. Rahul Sharma" required autocomplete="name"></div>
             <div class="fg"><label for="phone">Phone number *</label><input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[6-9][0-9]{9}" autocomplete="tel"></div>
             <div class="fg"><label for="reason">What brings you in?</label><textarea id="reason" placeholder="e.g. Toothache, cleaning, checkup, sensitivity..."></textarea></div>
@@ -738,6 +730,7 @@ function toggleFaq(btn) {
   if (!isOpen) item.classList.add('open');
 }
 
+// Handle the submission safely after the DOM structure is ready
 async function handleSubmit(e) {
   e.preventDefault();
   const btn = document.getElementById('submit-btn');
@@ -754,7 +747,26 @@ async function handleSubmit(e) {
   // Direct/organic: no params → saved as "Direct"
 
 
-  // ── 1. UTM tracking ───────────────────────────────────────────────
+  // ── 1. FIRE TRACKING EVENTS IMMEDIATELY ─────────────────────────
+  // Fire Meta Lead Event
+  if (typeof fbq !== 'undefined') { 
+    fbq('track', 'Lead', {
+      content_name: 'Consultation Booking',
+      currency: 'INR',
+      value: 1.0
+    }); 
+  }
+
+  // Fire Google Ads Conversion Event
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18218773760/BubUCNnC97kcEIDase9D',
+        'value': 1.0,
+        'currency': 'INR'
+    });
+  }
+
+  // ── 2. UTM Tracking Parsing ──────────────────────────────────────
   const params      = new URLSearchParams(window.location.search);
   const utmSource   = params.get('utm_source')   || 'Direct';
   const utmMedium   = params.get('utm_medium')   || '';
@@ -773,16 +785,6 @@ async function handleSubmit(e) {
     source:    sourceLabel
   };
 
-  // ── 2. FIRE META PIXEL IMMEDIATELY ───────────────────────────────
-  // Firing this before the network request ensures it executes cleanly
-  if (typeof fbq !== 'undefined') { 
-    fbq('track', 'Lead', {
-      content_name: 'Consultation Booking',
-      currency: 'INR',
-      value: 1.0
-    }); 
-  }
-
   // ── 3. Submit Data to Google Sheets ──────────────────────────────
   try {
     await fetch(CLINIC.APPS_SCRIPT_URL, {
@@ -790,25 +792,23 @@ async function handleSubmit(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-  } catch(err) { console.log('Submitted'); }
+  } catch(err) { 
+    console.log('Submitted Data Endpoint:', err); 
+  }
 
-  // ── 4. Switch UI to Success State ────────────────────────────────
+  // ── 4. UI Success State Change ───────────────────────────────────
   document.getElementById('form-content').style.display = 'none';
   document.getElementById('success-state').style.display = 'flex';
 }
 
-
-// Add this at the bottom of your script block to bind the form to your code
+// Safely attach the submit event listener to the form element
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('consultation-form');
+  const form = document.querySelector('form');
   if (form) {
+    form.removeAttribute('onsubmit'); // Remove old inline breaker
     form.addEventListener('submit', handleSubmit);
-  } else {
-    console.error("Form with id 'consultation-form' not found!");
   }
 });
-
-
 </script>
 </body>
 </html>
