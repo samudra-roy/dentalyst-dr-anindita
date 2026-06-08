@@ -752,6 +752,9 @@ async function handleSubmit(e) {
   // Google ad URL:  ?utm_source=google&utm_medium=cpc&utm_campaign=search
   // Meta ad URL:    ?utm_source=meta&utm_medium=paid&utm_campaign=instagram
   // Direct/organic: no params → saved as "Direct"
+
+
+  // ── 1. UTM tracking ───────────────────────────────────────────────
   const params      = new URLSearchParams(window.location.search);
   const utmSource   = params.get('utm_source')   || 'Direct';
   const utmMedium   = params.get('utm_medium')   || '';
@@ -770,6 +773,17 @@ async function handleSubmit(e) {
     source:    sourceLabel
   };
 
+  // ── 2. FIRE META PIXEL IMMEDIATELY ───────────────────────────────
+  // Firing this before the network request ensures it executes cleanly
+  if (typeof fbq !== 'undefined') { 
+    fbq('track', 'Lead', {
+      content_name: 'Consultation Booking',
+      currency: 'INR',
+      value: 1.0
+    }); 
+  }
+
+  // ── 3. Submit Data to Google Sheets ──────────────────────────────
   try {
     await fetch(CLINIC.APPS_SCRIPT_URL, {
       method: 'POST', mode: 'no-cors',
@@ -778,11 +792,9 @@ async function handleSubmit(e) {
     });
   } catch(err) { console.log('Submitted'); }
 
+  // ── 4. Switch UI to Success State ────────────────────────────────
   document.getElementById('form-content').style.display = 'none';
   document.getElementById('success-state').style.display = 'flex';
-
-  if (typeof fbq !== 'undefined') { fbq('track', 'Lead'); }
-
 }
 </script>
 </body>
